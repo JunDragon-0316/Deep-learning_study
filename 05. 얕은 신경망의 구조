@@ -1,0 +1,19 @@
+1. 신경세포 (Neuron)
+- 생물학적인 신경 세포를 단순화하여 모델링한 뉴런. 여러 신호를 받아, 
+  하나의 신호를 만들어 전달하는 역할을 한다.
+- 출력을 내기 전에 활성 함수(activation function)을 통해 비선형 특성을 가진다.
+
+2. Neuron의 그래피 표현
+- Node = 단일 뉴런 연산 (동그라미)
+- Edge = 뉴런의 연결성 (네모)
+
+3. 인공신경망 (ANN / Artificial Neuron Network)
+- 뉴런이 모여 서로 연결된 형태 (모든 딥러닝 네트워크의 기반)
+
+4. 전결합 계층
+- 모든 뉴런이 서로 연결된 계층 (Fully - Connected Layer / Dense Layer)
+- Layer = 뉴런이 모인 한단위를 계층이라 한다. (입력 * 출력 = 뉴런의 갯수)
+
+5. 얕은 신경망 (SNN / Shallow Neuron Network)
+- 입력, 은닉, 출력의 3가지 계층으로 구성되어 있으며, 은닉계층과 출력계층이 Fully connected 계층인 모델
+
