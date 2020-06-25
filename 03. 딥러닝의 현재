@@ -1,0 +1,30 @@
+# 2014~2015 서포트 벡터머신 (관심도를 넘어섬)
+## 2016년 3월 알파고 (딥러닝 관심도 多)
+## 머신러닝이전의 딥러닝의 왕좌 = 서포트 벡터머신
+
+1. 딥러닝의 대중화 - Framework
+- [1] Caffe2 (c ++, scripting , rinux 기반) // MatConvNet (c ++, scripting, window기반)
+- 대중적으로 알려진 첫 프레임 워크 // MATLAP 환경에 익숙한 연구원들이 사용
+- CUDA / CUdnn 기반
+
+- [2] TensorFlow // Pytorch
+- PyTorch = 진입장벽이 낮음 (연구 활동에 활용가능)
+- TensorFlow = 다양한 플랫폼으로 확장가능 
+
+2. Cloud platform
+- aws // GCP // Microsoft Azure
+- 초기 클리우드 시장 점령 AWS
+- GCP (구글 클라우드 플랫폼) 최근 공격적인 마케팅을 선보이는중 (AutoMl , 영산분석모델..하이레벨 )
+- Microsoft Azure - B2B 중심으로 클라우드 시장에 자리매김
+- Enterprise IT -> Infrastructure (IaaS) -> Platform(PaaS) ->Software(SaaS) 순으로 발전
+
+3. Hardware (GPU)
+- GTX, Titan, TESLA 로 구분되는 NVIDIA 사의 GPU 라인업.
+- 딥러닝 연구의 대중화 기여 (GTX)
+
+4. 딥러닝 적용 분야
+- 자율주행, 스마트팜, 넷플릭스 추천, 스마트 팩토리, 챗봇, 인공지능, IPE 카메라
+
+5. 딥러닝 시장 전망
+- 2025년 7배 이상 성장
+- soft , Hardware , service -> 모두 균등하게 성장
