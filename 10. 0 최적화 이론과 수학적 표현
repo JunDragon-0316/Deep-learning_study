@@ -1,0 +1,21 @@
+1. 최적화 이론 (Optimization Theory)
+- 가능한 모든 해 중 최적의 해를 찾는 문제를 해결하는 이론
+- 연속 변수와 불연속 변수에 따라 크게 둘로 나누어진다.
+- 부등식 및 등식 제약조건을 지키면서, 목적 함수가 최소가 되게 하는 x를 찾는 문제 
+- 최소화 문제 (minimization problem) ↔ 최대화 문제 (maximization problem)
+- f(x)의 형태에 따라 다양한 문제 해결 알고리즘이 있다.
+- 딥러닝에서는 대부분 제약 조건은 사용하지 않는다.
+
+2. 분석적 VS. 수치적 방법
+- 분석적 방법(Analytical method) : 함수의 모든 구간을 수식으로 알 때 사용하는 수식적인 해석 방법.
+- 수치적 방법(Numerical method) : 함수의 형태와 수식을 알지 못할 때 사용하는 계산적인 해석 방법.
+
+3. 전역 VS. 지역 솔루션
+- Global solution 은 정의역(Domain)에서 단하나 존재한다.
+- Local solution 은 여러개 존재 가능하다.
+- 일반적으로 하나의 솔루션을 찾았을때 local 인지 global인지 확신할 수 없다. 
+
+4. 딥러닝과 최적화 이론
+- 딥러닝 네트워크 학습은 손실 함수가 최소가 되게 하는 파라미터를 구하는 최적화 문제로 볼 수 있다. 
+- 학습입력 (Trainin Input) -> 네트워크 구조(Network Architecture) 
+  -> 손실함수 (Loss function) -> 알고리즘 최적화 기법(Algorithm Optimizer)
