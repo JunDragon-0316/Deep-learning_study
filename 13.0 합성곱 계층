@@ -1,0 +1,12 @@
+1. 뉴런
+- 입력(Inputs) -> 가중치(Weight) -> 편향 (Bias) -> 활성함수(Activation Function)
+- 입력 뉴런 대신 입력 영상을, 가중치 대신 필터를, 곱 대신 합성곱을 사용하면 된다.
+- 편향 (Bias)는 그대로 동일하게 유지된다.
+
+2.합성곱 계층(Convolutional Layer)
+- 합성곱으로 이루어진 뉴런을 전결합 형태로 연결한 것을 합성곱 계층이라 한다.
+- 합성곱 계층은 주로 방식으로 Hin x Win x Cin(입력), Kh x KW x Cin x Cout필터(Kernel),
+  Hout x Wout x Cout(출력) 방식으로 사용된다. (H = hight, W = width, C= Channel)
+
+3. 합성곱 계층의 의미
+- 여러 채널에서 특별한 '특징'이 나타나는 위치를 찾아내는 것이 합성곱 계층의 임무이다.
