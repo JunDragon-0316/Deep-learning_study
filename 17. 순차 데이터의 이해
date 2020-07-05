@@ -1,0 +1,25 @@
+1. 순차데이터 (Sequential Data)
+- DNA 염기 서열(Sequential Data), 세계 기온 변화(Temporal sequence), 샘플링된 소리 신호(Time Series)
+- 순서가 의미있으며, 순서가 달라질 경우 의미가 손상되는 데이터를 순차 데이터라고 한다.
+- 시간적 의미가 있는경우 Temporal sequence라고 하며, 일정한 시간차라면 Time Series라고 한다.
+
+2. Resampling
+- Temporal Sequence를 Time series로 변환하기 위해서는 Resample을 수행한다.
+- 취득된 데이터(Temporal Sequence)를 이용해 신호를 보간(Interpolation)하고, 이를 균일 시간 간격으로 샘플링한다.
+
+3. 심층 신경망과 순차데이터 
+- Fixed-Length Vector? -> 입력되는 음성의 길이는 매번 다름.
+- 00 먹으러 가자! -> One Hot Vector? -> 번역 결과가 될 수 있는 문장은 무수히 많음
+- 심층 신경망으로 음성 인식을 하려고 할떄, 입출력 모두 문제가 있다.
+
+4. 다중입력, 단일출력
+- What, time, is, it? -> Sequence Data Proccessor -> it's{Time}
+- 개인 비서 서비스는 다중 입력에 단일 출력을 하는 모델이다.
+
+5. 다중입력, 다중 출력
+- I, have, a, pen -> Sequence Data Proccessor -> 나는, 펜을, 가지고 있다.
+- 번역기는 다중 입력에 대해 다중 출력을 해 주는 모델이다. 물론 입력과 출력의 길이는 다를 수 있다.
+
+6. 단일 입력, 다중 출력
+- 사진묘사(dog) -> Sequence Data Proccessor -> dog, is, eating
+- 사진을 묘사하는 장면 이해 알고리즘은 단일 입력에 대해 다중 출력을 내는 모델이다.
