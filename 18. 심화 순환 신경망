@@ -1,0 +1,36 @@
+1. 순환 신경망 Recurrent Neural Network
+- 바닐라 순환 신경망에 맛깔 난 토핑을 얹으면 심화 순환 신경망이 된다.
+
+2. 기울기 소실문제
+- 어떤 입력의 정보가 사용되는 시점이 차이가 날 경우 , 학습 능력이 저하된다.
+- Vanilla RNN을 안쓰는 이유
+
+3. LSTM Long Short-Term Memory
+- Vanilla RNN을 개선한 LSTM 구조.
+- 기억할 것은 오래 기억하고, 잊을 것은 빨리 잊어버리는 능력이 있다.
+- 선이 2개가 있다.
+
+4. Cell State, Hidden State.
+- 선이 2개인 이유
+- Cell State : 기억을 오랫동안 유지할 수 있는 구조. 새로운 특징을 덧셈으로 받는 구조(Residual Network)
+- Hidden State : 계층의 출력/다음 타임 스텝으로 넘기는 정보
+- RNN과 달리, Cell State가 있어서 기억에 관한 부분을 전담한다.
+
+5. Forget Gate , Input Gate, Output Gate 
+- Forget Gate : sigmoid 활성 함수로, 0~1의 출력 값을 가짐.
+- Cell state에 이를 곱해 주어서 얼만큼 잊을지를 결정.
+- Input Gate : sigmoid 활성 함수로, 0~1의 출력 값을 가짐.
+- 새롭게 추출한 특징을 얼만큼 사용할 지 결정.
+- Output Gate : sigmoid 활성 함수로, 0~1의 출력 값을 가짐.
+- Cell로부터 출력을 얼마나 내보낼지 결정하는 역할.
+
+6. GRU Gated Recurrent Unit 
+- LSTM 간소화한 버전이라고 할 수 있다.
+- 구조 : Cell state가 없고, Hidden state만 존재한다.
+- Forget Gate, Input Gate를 결합 하였다.-> LSTM과 동일한 Forget Gate를 사용한다.
+- Forget Gate를 1에서 빼서 Input Gate로 사용하였다.
+- Reset Gate를 추가 하였다.
+- Reset Gate : sigmoid 활성 함수로, 0~1의 출력 값을 가짐.
+               이전 Hidden State를 얼마나 사용할지 정하는 역할.
+               0에 가까운 값이 되면 Reset이 된다.(ex)새 문장의 시작)
+- 
