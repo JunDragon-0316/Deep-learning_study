@@ -1,0 +1,20 @@
+1. 데이터 증강
+- 흔히 잘 정제된 데이터만 많이 모아서 학습하면 된다는 생각에, 데이터를 인위적으로 변형하는 것을 잘 이해하지 못하는 경우가 있다.
+
+2. 불변성 Invariance
+- X- 불변 함수는 입력에 X를 적용해도 그 결과가 영향을 받지 않는다 
+- 단 여기서 영향을 받지 않는다는 것은 출력에 X를 적용한 것과 같다는 의미다.
+- 회전과 불변성 : 원본 -> Scale -> Rotate /// 원본 -> Rotate -> Scale
+                  회전은 Scale에 Invariant 하다.
+                  원본 -> Translate(평행이동) -> Rotate // 원본 -> Rotate -> Translate
+                  회전은 Translation에 Variant 하다
+- Affine Transform 2차원 변환 : 영상의 2차원 변환 CNN은 Affine Transform에 Variant하다
+                                즉 Affine Transform으로 변환된 영상은 다른 영상으로 인식한다.
+                                CNN은 Affine Transform에 취약하다
+                                회전(Rotate), 크기(Sclae), 밀림(Shearing), 반사(Reflaction), 이동(Translation)
+                                다양한 영상을 학습에 넣어주는 것은 의미가 있다.
+- Noise 삽입 : 다양한 방법으로 영상을 열화시켜 Data Augmentation을 할 수 있다.
+              JPEG Noise, Gaussian Noise, Quantization Noise, Blur ...
+- 색상, 밝기 변형 : 색상, 밝기, 대비 등을 변형하여 사진의 촬영 환경이 달라지는 것을 시뮬레이션 할 수 있다.
+                    Black & White, Color Tone, Brightness & Contract , White Balance
+                    
