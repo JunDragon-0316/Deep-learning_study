@@ -1,0 +1,65 @@
+1. Attention mechanism
+- Compare 함수로는 Dot- Product (Inner Product) 내적이 많이 쓰이며, 
+- Aggregation은 Weighted sum을 많이 사용한다
+- Compare(q,kj)=q·kj = qtkj
+- Aggregation(c,V)= ∑cjvj
+                    j
+2. Seq2seq
+- Encoder : (x0)-> RNN ->(h0) -> (x1) ->RNN->(h1) -> (x2)->RNN/->(h2)
+- Decoder : RNN->(y0) -> (y0)-> RNN ->(y1) -> (y1)->RNN->(y2)
+- seq2seq key value : Encoder의 hidden layer들을 key 와 value로 사용한다
+- seq2seq query : Encoder의 hidden layer들을 query로 사용한다
+- ci = softmax(sthj)
+                i
+- ai = ∑cihj
+       j
+- 블록도에 비해 수식이 오히려 간단하다.
+- seq2seq Application : Hidden state에 attention value 를 concatenate까지 하면 모든 수식적 표현이 끝난다
+- ci = softmax(sthj)
+                i
+- ai = ∑cihj
+       j
+- vi = [si;ai-1] - concatenate 후 출력
+
+3. Encoder 입출력
+- Attention mechanism 을 위한 Hidden layer 출력 : h0, h1, h2 - H ∈ R BXLXM
+- X ∈ R BXLXN 알고리즘 입력 : x0, x1, x2
+- H ∈ R BXM, C ∈ R BXM : context 전달을 위한 Encoder 출력 : hL-1, CL-1
+
+4. Decoder 입출력(학습 단계)
+- Output layer를 위한 Hidden layer 출력 : S ∈ R BXLXM - s1, s2, s3
+- H ∈ R BXM - h0 = hL(Dec)-1, C ∈ R BXM - c0
+- Y ∈ R BXLXN 알고리즘 출력(Shifted) : SOS, y0, y1, y2
+
+5. Output W/ Attention (학습 단계)
+- Encoder 출력 (Key, Value) H ∈ R BXLXM -> Query(s0)->  Attention mechanism -> a1
+-> Concatenate -> Dense -> y0
+- s1 -> Attention mechanism -> a2 -> Concatenate -> Dense -> y1
+- Decoder 출력 S ∈ R BXLXM  ->s2 -> Attention mechanism -> a3 -> Concatenate -> Dense -> y2
+- s3, s4 -> Attention mechanism -> a4 -> Concatenate -> Dense -> SOS -> Y ∈ R BXLXN 알고리즘 출력
+
+6. Attention is all you need 
+- Transfomer model에 사용된 수식
+- Input & Output : y=[y0,y1...ym]출력 sequence의 길이m, 출력단어의 가짓수 = one-hot encoding
+                   x=[x0,x1...xn]입력 sequence의 길이n, 입력단어의 가짓수  
+                   y=[0,y0...ym-1]출력 sequence의 길이m, 출력단어의 가짓수 = SOS
+- Positional Encoding : 시간적 위치별로 고유의 Code를 생성하여 더하는 방식
+                        전체 Sequence의 길이 중 상대적 위치에 따라 고유의 벡터를 생성하여 Embadding된 벡터에 더해줌
+                        PE(POS,2i) = sin(pos/100002i/dmodel)
+                        PE(POS,2i+1) = cos(pos/100002i/dmodel)
+                        Position별로 구분되는 Encoding을 얻게됨, pos: 상대적 위치, i: 벡터의 element인덱스
+- Sclaed Dot-Product Attention - Query, Key, Value의 구조를 띄움
+                                Q와 K의 비교 함수는 Dot-Product와 Scale로 이루어짐
+                                Mask를 이용해 Illegal connection의 attention을 금지
+                                softmax로 유사도 0~1의 값으로 Normalize
+                                유사도와 V를 결합해 Attention vlaue계산
+                                Q = [q0,q1...qn],k = [k0,k1...kn], V = [v0,v1...vn]
+                                C = softmax(Kt Q) , a = CtV = softmax(Q Kt)v
+                                            √dk                        √dk
+- Multi -Head Attention : Linear 연산 (Matrix Mult)를 이용해 Q,K,V의 차원을 감소Q와 K의 차원이 다른경우 이를 이용해 동일하게 맞춤
+                          h개의 Attention Layer를 병렬적으로 사용 - 더 넓은 계층 
+                          출력 직전 Linear 연산을 이용해 Attention vlaue의 차원을 필요에 따라 변경
+                          이 메커니즘을 통해 병렬 계산에 유리한 구조를 가지게 됨
+                          Lineari(V) = VWv,i Wv,i ∈RdvXdmodel
+                          Lineari(K) = VWK,i Wk,i ∈RdkXdmodel
+                          Lineari(Q) = VWQ,i WQ,i ∈RdQXdmodel
