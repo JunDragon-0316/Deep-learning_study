@@ -1,0 +1,51 @@
+1. 배치 정규화의 한계
+- Mini- batch에 의해 크게 영향을 받는다
+- 배치 크기가 너무 작으면 잘 동작하지 않는다
+- 메모리의 한계로 인해 RNN이나 크기가 큰 CNN에 적용하기 어렵다
+- 배치의 크기가 너무 커도 잘 동작하지 않는다.
+- 병렬화 연산 효율이 떨어진다.
+- μbatch = 1 ∑ xi
+           B i
+- σbatch = 1 ∑ (xi - μbatch)2
+           B i
+
+2. 가중치 정규화 Weight Nomalization
+- FC 계층의 W는 방향과 크기를 같이 학습하지만, 이를 분리하여 g와 v로 나누어 학습
+- 학습 시 자유도가 개선되어 최적화가 더 쉽게 이루어 진다.
+- 학습 시 CNN에서 배치 정규화 대비 연산량이 매우 감소(Feature에 적용 Vs. Weight에 적용
+- FC(x)i = Wtx + bi
+            i               g                              gi   t  
+- FCWN(x)i = Wtx + bi = w ||v|| v (Re-parametrization) = ||v|| ViX + bi
+              i            
+
+3. 계층 정규화 Layer Normalization
+- 배치 정규화와 달리, 각 샘플 내에서 계층에 대해 정규화 수행 (모든 데이터가 서로 independent하다는 가정)
+- 배치의 크기에 영향을 받지 않으며, RNN에서도 잘 동작함
+
+4. CNN의 발전
+- Vanilla CNN -> ResNet -> DenseNEt.. 등 다양한 네트워크가 등장하면서 Vanilla CNN은 설 자리가 없어졌다.
+
+5. 자가 정규화 신경망 Self Normalizing Neural Network
+- SNN은 바늘라 CNN에 약간의 변화를 줌으로써, 스스로 정규화하는 계층을 형성한다
+- BatchNorm 대비 훨씬 더 안정적이면서 좋은 성능을 보인다.
+- SELU (Scaled Exponential Linear Unit) : SELU는 ReLU와 달리, 음수 값을 Exponential하게 활성화 하는 특징이 있다.
+                                          λ와 α의 값에 따라 특징이 결정된다.
+                                          자가 정규화를 위한 이값은 λ= 1.05047, α=1.67326으로 알려져 있다.
+- α-DropOut : DropOut이 ReLU에 잘동작하는 것을 반영하여 SELU에 적합하도록 변형한 버전
+              복잡한 Derivation을 통해 α'값을 결정해 두엇으며, dropout-rate는 5~10%로 비교적 작다.
+- SNN Result : 딥러닝에서도 세심한 수학적 연구가 직관을 뛰어넘을수 있다는 것을 증명한 사례
+
+6. SMOTE 알고리즘
+- 불균형 데이터 Imbalanced Data : 클래스별로 학습 데이터셋의 크기가급격히 차이가 나는 데이터.
+- 임의 언더 샘플링 Random under Sampling : 다수클래스 (Majority Class)에서 임의로 샘플링하여 크기를 맞추는 방법
+                                          이경우, 임의로 선택된 샘플이 대표성이 떨어질 경우 학습이 잘못된 방향으로 될 수 있다.
+- 임의 오버 샘플링 Random over Sampling : 소수클래스(Minority Class)의 데이터를 반복하여 학습 데이터양을 맞추는 방법
+                                         이는 학습 시 소수 클래스의 가중치를 증가시키는 것과 유사하다.
+- SMOTE : k- Nearest Neighbor 중 랜덤으로 하나의 샘플을 선택하여 Linear Combination을 추가한다.
+          임의 오버 샘플링에 비해 다양한 데이터를 추가할 수 있는 장점이 있다.
+- Borderline -SMOTE : 안전지역에 있거나, 잡음으로 간주되는 샘플은 오버 셈플링 하지 않고,
+                      위험 지역인 경계에 있는 샘플만 오버 셈플링 하여 SMOTE를 효과적으로 개선하였다.
+                      A : 잡음 (noise)샘플. NM = k
+                      B : 안전 (safe)샘플. NM < k/2
+                      C : 위험 (Danger)샘플. k/2 <= NM < k
+                      
