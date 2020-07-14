@@ -1,0 +1,80 @@
+# 실전 문제 해결 (부족한 데이터셋)
+import tensorflow as tf
+from imblearn.over_sampling import BorderlineSMOTE
+import numpy as np
+import random
+
+## 하이퍼 파라미터
+EPOCHS = 100
+
+## 모델 정의
+class MyModel(tf.keras.Model):
+    def __init__(self):
+        super(MyModel, self).__init__()
+        self.flatten = tf.keras.layers.Flatten()
+        self.dense1 = tf.keras.layers.Dense(1024, activation='relu')
+        self.dense2 = tf.keras.layers.Dense(1, activation='sigmoid')
+
+    def call(self, x, training=False, mask=None):
+        x = self.flatten(x)
+        x = self.dense1(x)
+        return self.dense2(x)
+        
+## 데이터셋 준비 (불균형한 데이터셋)
+cifar10 = tf.keras.datasets.cifar10
+
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+x_train, x_test = x_train / 255.0, x_test / 255.0
+
+# TODO: 학습 데이터를 Imbalanced small dataset으로 변형하기
+x_train_small = list()
+y_train_small = list()
+for x, y in zip(x_train, y_train):
+    if(y == 0 and random.randint(0, 100) < 10) or y == 1:
+        x_train_small.append(x[:])
+        y_train_small.append(y)
+        
+x_test_small = list()
+y_test_small = list()
+for x, y in zip(x_test, y_test):
+    if y == 0 or y == 1:
+        x_test_small.append(x[:])
+        y_test_small.append(y)
+        
+x_train = np.stack(x_train_small, axis=0)
+y_train = np.stack(y_train_small, axis=0)
+
+x_test = np.stack(x_test_small, axis=0)
+y_test = np.stack(y_test_small, axis=0)
+
+train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(10000).batch(32).prefetch(2048)
+test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32).prefetch(2048)
+
+## Keras API 모델 학습 (불균형한 데이터셋)
+model = MyModel()
+model.compile(optimizer='adam',
+              loss='binary_crossentropy',
+              metrics=['accuracy',
+                       tf.keras.metrics.Precision(name='precision'),
+                      tf.keras.metrics.Recall(name='recall')])
+model.fit(train_ds, validation_data=test_ds, epochs=EPOCHS)
+
+## 데이터셋 준비 (BorderlineSMOTE)
+# TODO: BorderlineSMOTE 적용하기
+x_train = x_train.reshape((x_train.shape[0], x_train.shape[1] * x_train.shape[2] * x_train.shape[3])).astype(np.float32)
+x_test = x_test.reshape((x_test.shape[0], x_test.shape[1] * x_test.shape[2] * x_test.shape[3])).astype(np.float32)
+
+smote = BorderlineSMOTE()
+x_train, y_train = smote.fit_resample(x_train, y_train)
+
+train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(10000).batch(32).prefetch(2048)
+test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32).prefetch(2048)
+
+## Keras API 모델 학습 (BorderlineSMOTE)
+model = MyModel()
+model.compile(optimizer='adam',
+              loss='binary_crossentropy',
+              metrics=['accuracy',
+                       tf.keras.metrics.Precision(name='precision'),
+                      tf.keras.metrics.Recall(name='recall')])
+model.fit(train_ds, validation_data=test_ds, epochs=EPOCHS)
