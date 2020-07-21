@@ -1,0 +1,89 @@
+1. 자연어 처리 NLP: Natural Languege Processing
+- 컴퓨터과학, 인공지능, 언어학 자연어의 의미를 분석하여 컴퓨터가 처리하도록 하는 일을 뜻한다.
+- 챗봇, 클린봇, 인공지능 비서 등에 활용
+
+2. 의외로 NLP가 아닌것
+- 자동 음성 인식 (ASR; Automated Speech Recognition),  광학 문자 인식(OCR; Optical Character Recongnition)
+- 단순 음성 인식과 문자 인식의 경우, 자연어의 의미를 이해하지 않으므로 NLP와는 다르다.
+- 단 최근에는 NLP 기술과 결합하여 ASR과 OCR의 성능을 향상시키고 있다.
+- 자동 음성 인식 -> 문장 -> 발음의 부정확성 -> 인식 x -> 이러한 부분을 수정 보완하는 형태
+- 광학 문자 인식 -> 페이지 스캔 -> 손상 및 오타 -> 인식 x -> 문맥을 예측하는 형태
+
+3. NLP의 어려움
+- 자연어 처리 -> 복잡성(Complexity), 애매함(Ambiguity), 의존성(Dependency)
+- 사람도 사람의 말을 이해하기 어렵다. 사람은 사전지식(a priori), 다중모드(Multi mode),
+  상호작용(Interaction) 등으로 이를 해결한다.
+
+4. 머신러닝 Vs. 딥러닝
+- 머신러닝 : 도메인 지식을 상당히 요하기 때문에 , 진입 장벽이 높고 기대효과가 분명하다
+-            언어학 지식이 많이 필요로 함
+- 딥러닝 : 인공지능 기술이 핵심이 되며, 도메인 지식의 상당 부분을 Data-Driven 으로 해결하여 
+           의외의 Insight를 얻을 수 있다. 언어학적인 지식이 상식적인 부분만 필요하다.
+
+5. 자연어 처림 딥러닝 애플리케이션
+- 문장번역 Machine Translation : 문장 번역기능을 학습할 수 있는 Seq2seq model
+- 감정 분석 Sentiment Analysis : 금융(주식) 또는 경영에서 판단에 도움을 받기 위해 사용하는 감정 분석 
+- Chatbots : 챗봇은 문맥을 이해하고, 다양한 답변을 생성해야 하므로 다양한 기술을 종합해야 한다.
+- 문맥광고 Contextual Advertising : 금융 또는 경영에서 판단에 도움을 받기 위해 사용하는 감정 분석
+
+6. 단어를 숫자로 표현하기
+- 컴퓨터가 보는 문자 : ASCII, 유니코드, UTF-8 encoding등으로 문자를 표현하고 저장한다.
+- 컴퓨터가 보는 단어 : love 는 live보다 like와 더 유사하다. 하지만 컴퓨터가 보기에는 
+                       love는 live와 더 비슷해 보인다.
+- One-Hot Encoding : N개의 단어를 코드로 표현하면 희소 표현 (Spare representation)이라고 하며,
+                     벡터로 표현할 경우(One-Hot Encoding)이라고 한다.
+- 밀집 표현 Dense representation : 희소 표현된 단어를 임의의 길이의 실수 벡터로 표현할 경우, 이를 밀집 표현이라 한다.
+                                  이 과정을 Word Embedding이라고 하며, 밀집 표현된 결과를 임베딩 벡터라고 부른다.
+- 말뭉치 Corpus : 특정 목적을 가진 언어의 표본. 분석의 용이성을 위해 형태소 분석이 포함되기도 한다.
+                  언어학 연구에 쓰이는 확률/ 통계적인 자료이며, 딥러닝에도 유용하게 쓰인다.
+- Word2vec : 가장 많이 사용되는 Word Embedding 방법이다.
+             유사한 의미를 가진 단어는 유사한 벡터가 되는 특징이 있다.
+-CBOW (Continuous bag- of- Words) : 주변의 단어로 현재 단어를 추정하는 방법이다.
+                                   수식 v = ∑|n|Wxt+i
+                                             i=1
+                                                2n
+                                        y = softmax(W'v)
+- Projection Layer : One-Hot Vector의 특성상, LUT(Look-Up-Table)의 형태로 구현된다.
+- Output Layer : Loss Function은 정답인 One-Hot Vector와 Cross-Entropy Loss를 이용한다
+- Skip- Gram : CBOW와 반대로 Window 중앙에서 주변 단어를 추정하는 방식이다.
+               일반적으로 CBOW보다 Skip- Gram모델의 성능이 좋은 것으로 알려져 있다.
+
+7. 형태소 분석기
+- 형태소 Morpheme : 언어학적으로 말을 분석할 때, 의미가 가장 작은 말의 단위
+                    의존성-> 자립형태소, 의존형태소, 의미여부 -> 실질 형태소, 형식 형태소
+                    등등 다양한 방법으로 형태소의 종류를 나누어 볼 수 있다. 
+- 형태소 분석 : 문장을 형태소 단위로 구분하고, 언어적인 구조를 파악하는 것을 형태소 분석이라 한다.
+                어근, 접두사/접미사, 품사 (POS;Part-of Speech)등을 구분한다.
+-  KoNLPy : Java Script로 개바로딘 다양한 형태소 분석기의 Python Wrapper이다.
+            다양한 한글 형태소 분석기를 통일된 방법으로 쉽게 사용할 수 있다.
+            Hannanum(1999 Kaist), kkma(SNU), Komoran(Shineware 2013), Mecap-ko(Eunjeon PJ), OKT(twitter) 등을 활용한다.
+
+8. Seq2seq (Attention)                    y0      y1    EOS
+                                       Softmax Softmax Softmax
+             h0    h1     h2            Dense   Dense  Dense
+- Encoder : RNN-> RNN -> RNN / Decoder : RNN -> RNN -> RNN
+             x0    x1     x2             sos     y0     y1
+- 번역 문제를 학습하귀 위해 널리 사용되고 있는 RNN구조이다.
+- Encoder Hidden state를 모아서 Decoder로 전달하면 Context를 향상 시킬수 있을 것이다.!
+- Query : 질의.찾고자하는 대상 ; 질의-응답 -> 비교 -> 값 출력
+- Key : 키. 저장된  데이터를 찾고자 할 때 참고하는 값 ; 
+- Value : 값. 저장되는 데이터
+- Dictionary : Key-Value Pair로 이루어진 집합
+- Attention Mechanism : Q에대해 어떤 K가 유사한지 비교하고, 유사도를 반영하여 V들을 합성하는 것.
+
+9. ConvNet을 이용한 문장 분류
+- 합성곱 신경망 : 이미지 분류(Image Classification)에 널리 사용되는 네트워크 구조이다
+                  합성곱 계층, 풀링 계층, 활성 합수 -> N번 반복
+- 2-D 합성곱 계층 : 합성곱으로 이루어진 뉴런을 전결합 형태로 연결한 것을 합성곱 계층이라고 한다.
+                   2-D 합성곱 계층에서 Width axis가 사라지면 1-D 합성곱 계층이 된다.
+- n x k -> convolitional layer -> Max over time pooling -> fully connected layer (softmax)
+
+10. 자연어 처리 대세 Transfomer
+- Attention is all you need : 번역 문제에 RNN과 CNN을 사용하지않고 Attention만을 이용하여
+                              State of the art 성능을 끌어낸연구
+- 네트워크 특성 : Seq2seq와 유사한 Transfomer구조 사용
+                 제안하는 Scaled Dot-product Attention과, 이를 병렬로 나열한 Multi Head Attention 블록이
+                 알고리즘의 핵심
+                 RNN 의 BPTT같은 과정이 없으므로 병렬 계산 가능
+                 입력된 단어의 위치를 표현하기 위해 Positional Encoding 이용
+
