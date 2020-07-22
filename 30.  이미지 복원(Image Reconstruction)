@@ -1,0 +1,90 @@
+1. 이미지 향상 Vs. 이미지 복원
+- Image Enhancement : Original Image -> Enhanced with SUACE // 흐릿한 이미지를 선명하게 변환
+                        Input              output                   (정답이 없는 상태)
+- Image Reconstruction : 소실, 훼손되거나, 없는 부분을 예측해서 이미지를 삽입(정답이 있는 상태)
+- Image Super - Resolution (SR) : 딥러닝이 도입된 이후로 급격하게 성능이 향상되었다.
+- SR paper 
+- Colorization : 흑백 영상에 활기를 찾아주는 알고리즘. 딥러닝이 매우 유효하다.
+- Image Inpainting : 빈 공간을 메우는 알고리즘. 이미지 편집에 매우 유용하게 쓰인다.
+
+2.  ConvNets for Classification
+- Input -> Convolitions -> Subsampling -> Convolitions -> Subsampling -> Fuuly Connected
+
+3. ConvNets for Reconstruction
+- Low-resolution image(input) -> patch extraction and representation -> Nonliner mapping 
+    -> Reconstruction -> High-resolution image(output)
+- 딥러닝을 이용한 Super- Resolution 의 효시인 SRCNN. 가장 대표적인 Image Reconstruction 모델이다.
+
+4. Classification vs. Reconstruction
+- Image Classification : 영상입력- > softmax 출력, 입/출력의 크기가 고정 
+                         샘플 단위로 학습 ,Discriminative feature 학습.
+- Image Reconstruction : 입력영상 -> 영상출력 , 입력크기에 따라 출력크기 변화 
+                         패치 단위로 학습, Generative feature 학습
+                         
+5. Conv Layer Vs. Dense Layer 
+- 입력크기에 따라 출력크기가 변화 : Conv
+- 입/출력 크기가 고정 : Dense
+- Classification문제에서 입력의 크기가 고정되는 이유는 Dense layer가 존재하기 때문이다.
+- 입/출력 크기를 유연하게 하려면 Dense layer를 사용하지 않으면 된다.
+
+6.Receptive Fields in Reconstruction
+- 출력을 내기 위해 영상 전체가 필요 
+- 작은 영역의 출력을 내기 위해서는 해당 영역의 Receptive Field만 입력으로 받으면 된다.
+
+7. 복원할 부분에 집중하는 기법 (Attention Module)
+- Generative Image Inpainting : Adobe에서 발표한 방법. 2018
+- Contextual Attention : 빈 공간을 채우는 Inpainting 알고리즘. 주변 영상의 정보를 끌어와서 내용을 채우는 특징
+                         Hole 영역(Foreground)와 유사한 영역을 Cosine similaruty를 이용해 찾아낸다
+                         해당 영역의 Feature를 이용해 영상을 Deconvolution하여 복원한다.
+                         Input Feature -> Extract Patches -> Background -> Reshape -> Softmax for comparison -> Attention score for each Pixel
+                                       -> Fpreground -> Conv.for Matching-> Softmax for comparison -> Attention score for each Pixel(Deconv for Reconstruction)
+                         Coarse Result -> Contextual Attention Layer(Dilated Conv) -> Concat -> 
+                         Inpainting Result(Attention Map) / Attention Map Color Coding              
+- Overall Architecture : 전체구조를 보면, 크게 2-Stage로 되어있으며, Fully Convolutional한 특징이 있다.
+                         L-1 Loss와 더불어 Global과 Local GAN Loss를 사용한다 (WGAN-GP)
+                         Raw -> Input and Mask -> Coarese Network -> Coarese Result(Dilated Conv) -> 
+                         Refinement network(Dilated Conv) -> Inpainting Result -> Global Critic & Local Critic
+- Saptial Discounted Loss : Known Pixel로부터 거리가 멀 수록 L-1 Loss의 신뢰도가 낮다. 이것을 수학적으로 정의한 것.
+- Interesting Result : 주변 영역을 이용하여 충실하게 복원하는 경우도 있고, 얼굴을 이해해 눈을 복원하기도 한다.
+- Insights 직접 논문을 읽어보는 습관.
+
+8. 사실적으로 복원하는 기법
+- Photo-Realistic SISR(Single Image SR) : SISR에 큰 활력을 불어넣은 연구로, Loss Function의 중요성을 보여주었다.
+- bicubic(21.59dB/0.6423) // SRResNet(23.53dB/0.7832) // SRGAN(21.15dB/0.6868) // orignal
+- Generative Adversarial Networks (GAN): Generator와 Discriminator를 경쟁시켜서 Generator를 향상시키는 기법
+- GAN Loss의 당위성 : MSE 기반의 솔루션은 안전하지만, 항상 무난하게 좋은 Blurry한 솔루션이다
+                      GAN 기반의 솔루션은 여러 가능성 중 더 자연스러운 가능성을 선택한다.
+- VGG Loss : LR과 HR을 직접 비교하지 않고, VGG19 feature를 추출하여 MSE로 비교한 것을 VGG loss라 한다.
+             화소 단위로 비교하지 않고, Perceptual한 단위로 비교하는 결과를 가져온다.
+- Loss Comparision : 네트워크 구저만 개선한 SRResNet은 평탄한 영역에서는 성능이 좋으나, MSE의 한계가 나타난다.
+                     SRGAN, VGG를 쓰면서 점차 개선되는 것을 확인할 수 있다.
+- Insights : MOS(Mean Opinion Score)를 도입하여 시각적으로 훌륭하다는 점을 강조하였다,
+             학계에 새로운 시각을 던지려면, 그것을 수치적으로 잘 표현하는 것도 무척 중요하다.
+
+9. 응용하기 좋은 데이터 셋
+- DIV2k Dataset : CVPR 2017,2018에서 Challenge로 사용된 데이터셋 .2k 이미지를 SISR하는 데이터셋이다.
+- Well-Known SR Datasets : 특히 정성적인 결과를 볼 때에는 대중적으로 잘알려진 Set5, Set14에서 많이본다
+- VGGFace2 : Face Recognition을 위한 데이터 셋이지만, Face Image Restoration에도 사용할 수 있다.
+
+10. 관련 대회 소개
+- NTIRE (New Trends in Image Restoration and Enhancement) : CVPR과 함께 열리는 Workshop인 NTIRE에서 여는 Challenge
+            2018년까지는 SR Challenge만 있었지만, 2019년부터는 다양한 Task에 대해 Challenge를 열고 있다.
+- PIRM2018 : ECCV 2018과 함꼐 열린 Workshop에서 개최한 대회 / 2년마다 경년마다 대회가 열림
+
+11. 정량 지표
+- MSE(L-2 Loss) Mean Squared Error : Squared(제곱)된 Error(잔차)의 Mean(평균)을 구하는것이다. 
+                                     SRCNN에서 관습적으로 사용되었다.
+                                     보통 별 의심 없이 써 오던 MSE Loss는 평균을 나타내는 특성이 있다.
+                                     에러가 클수록 더욱 큰 패널티, 데이터의 평균- 존재하지 않는값
+                                     데이터를 Smoothing하는 효과, Outlier에 취약한 단점이 있다.
+- MAE(L-1 Loss) : 중간값의 특성이 있으며 , Outlier에 강건한 특성이 있다.
+                  에러가 커져도 동일한 패널티, 데이터의 중간값- 존재하는 정확한값
+                  존재하는 값을 사용하여 샤프한 특성, 적게 존재하는 값을 무시하는 특성
+- Loss Function Trends : L-2 loss(MSE)보다 L-1 loss의 채용이 더 많아지는 추세이다. 
+                         GAN Loss와 TV Regularization, LP Norm, TV도 사용한다. 
+- PSNR(Peak Signal-to-Noise Ratio): 잡음(에러)가 얼마나 되는지 측정하는 성능 지표 중 하나로, 영상 복원을 평가하는 데에 많이 사용한다.
+                                    Image Reconstruction/Restoration외에도 Image Encoding/Decoding 평가에 많이 쓰인다.
+                                    로그를 사용하기 때문에 단위는 dB를 쓴다.
+- SSIM(Structiral Similarity Index Measure): 구조적인 특징이 얼마나 일치하는지 측정하는 것.
+                                             미분이 가능하기 떄문에 Loss function으로도 사용된다.
+
