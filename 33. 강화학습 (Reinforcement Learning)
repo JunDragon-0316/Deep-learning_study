@@ -1,0 +1,126 @@
+33. 강화학습 (Reinforcement Learning)
+1. 강화학습이란? (Reinforcement Learning)
+- UnSupervised: No labels, No feedback, Find hidden structure
+- Supervised : Labeled data, Direct feedback, predict outcome/future 
+- Reinforcement : Decision process, Reward system, Learn seris of actions
+- 조작적 조건 형성 : 스키너의 상자
+                   배고픈 상태의 흰쥐를 스키너 상자에 넣는다
+                   배고픈 상태로 만드는것= 박탈
+                   흰쥐는 스키너 상자 안에서 돌아다니다가 우연히 지렛대를 누르게 도니다
+                   지렛대를 누르자 먹이가 나온다.
+                   지렛대와 먹이 간의 상관관계를 알지 못하는 쥐는 다시 상자 안을 돌아다닌다.
+                   다시 우연히 지렛대를 누른 흰 쥐는 또 먹이가 나오는 것을 보고 지렛대를 누르는 행동을 자주 하게 된다.
+                   이러한 과정이 반복되면서 흰 쥐는 지렛대를 누르면 먹이가 나온다는 사실을 학습하게된다.
+- 기계학습의 한 영역이다. 행동심리학에서 영감을 받았으며, 어떤 환경 안에서 정의된 에이전트가 현재의 상태를
+  를 인식하여 선택 가능한 행동들 중 보상을 최대화하는 행동 혹은 행동 순서를 선택하는 방법이다(Wikipidia)
+- 잘한 행동에 대해 칭찬 받고 잘못한 행동에 대해 벌을 받은 경험을 통해 자신의 지식을 키워나가는 학습법이다.
+ (KAIST 김종환 교수)
+- Traial and Error 시도 해보고 배우는 학습, Delayed Reward 보상이 지연될 수 있다.
+- Agent(에이전트) : 환경에서 상태를 관찰, 그 상태에대한 어떠한 기준에대한 행동을 선택, 선태한 행동을 환경에서 실행
+                    환경으로부터 다음 상태와 보상을 받음, 보상을 통해 에이전트가 가진 정보를 수정(목표지향)
+- Environment(환경) : 에이전트를 제외한 나머지 (물리적으로 정의하기 힘듦)
+- State(상태) : 현재 상황을 나타내는 정보
+- Action(행동) : 현재 상황에서 에이전트가 하는 것
+- Reward(보상) : 행동의 좋고 나쁨을 알려주는 정보 
+- RL Componets : Environment : 에이전트가 이동하는 세계. 에이전트의 현재 상태 및 행동(입력)을 취하여 
+                 보상과 다음 상태(출력)를 반환
+                 State & S : 에이전트가 인식하는 구체적이고 즉각적인 자신의 상황이다. 에이전트가
+                 마주하는 특정 장소와 시간이며 즉각적인 구성을 의미
+                 Agent : 행동을 취하는 주최. 배송 서비스를 수행하는 드론이나, 비디오 게임에서 슈퍼 마리오
+                 를 예로 들 수 있다.
+                 Action : 에이전트가 취할 수 있는 모든 행동을 말하며 에이전트는 수행 가능한 행동의 리스트
+                 중에서 앞으로 할 행동을 선택해야 한다.
+                 EX).비디오게임 - 오른쪽이나 왼쪽으로 달리기, 높거나 낮게 점프 (discrete)
+                 주식시장 - 유가 증권 및 파생상품을 구매, 판매 또는 보유(discrete)
+                 항공 드론 - 3D 공간에서의 여러 가지 속도와 가속도가 될 수 있다. (continues)
+                 정책(π) : 에이전트가 현재 상태를 기준으로 다음의 행동을 결정하는 데 사용하는 전략
+                 에이전트는 특정한 상태에서 보상을 최대화할 수 있는 행동을 선택
+                 Reward(R) : 에이전트의 행동에 대한 성공이나 실패를 측정하는 피드백. 에이전트의 행동
+                 에 의해 평가된 보상은 즉시 주어질 수도, 지연될 수 도 있음.
+                 할인율(γ감마, Discount factor) : 보통 0과 1사이의 값으로 즉각적으로 주어지는 보상보다
+                 상대적으로 갗치가 낮은 미래의 보상을 만들기 위한 고안. γ감마가 0.8이고 3단계를 거쳐 10점의 보상
+                 을 받는다면 보상의 현재가치는 0.8³ X 10이다.
+                 가치(Value Function): 단기적인 보상인 R과는 달리 Value는 장기적인 관점에서의 현재상태를 할인된
+                 모든 보상들의 기대값.vπ(s)란 현재의 상태에서 정책 π에 따른 기대되는 보상을 의미
+                 Q-Value Function & Action-Value Functio(Q): Qvalue와 Value는 비슷한데 Q-value는 현재 상태
+                 에서 취하는 행동 a를 고려한다는 것이 차이점이다.Qπ(s,a)은 정책 π에 따라 행동 a를 취할 경우
+                 현재의 상태 s에서 받을 장기적인 보상을 말한다. Q는 상태- 행동 쌍을 보상에 매핑한다.
+- RL Kinds : Model : agent가 관측하는 환경을 modeling 한 것
+             Policy based agent : value function 없이 policy와 model 만으로 구성
+             Value based agent : policy 없이 value function와 model 만으로 구성
+             Model based agent/ Model free agent : model에 대한 정보 = state transition 정보의 유무
+             Actor Critic : Policy, Value function, Model 을 모두 사용
+             
+2. 가치함수, 벨만방정식, MDP
+- Value Funtion : 보상(R) : 보상이란 에이전트의 행동에대한 성공이나 실패를 측정하는 피드백. 에이전트의
+                  행동에 의해 평가된 보상은 즉시 주어질 수도 지연될 수 도 있음
+                  할인율(γ감마, Discount factor) : 보통 0과 1사이의 값으로 즉각적으로 주어지는 보상보다
+                  상대적으로 갗치가 낮은 미래의 보상을 만들기 위한 고안. γ감마가 0.8이고 3단계를 거쳐 10점의 보상
+                  을 받는다면 보상의 현재가치는 0.8³ X 10이다.
+                  Return(G, total discount reward) : 전체 reward를 시간에 따른 감가상각을 포함하여 합산한 것
+                  가치(Value Function): expected return starting from state s 현재 상태 s에서부터
+                  시작 할 떄 기대되는 return값을 말한다.
+- Bellman Equation : 가치함수가 정의 되었을 때 판단 지표 2가지
+                     immediate reward Rt+1
+                     discounted value of successor state γv(St+1)
+- Markov Reward Process : Markov process의 각 state에 reward를 추가하여 확장한 것이다.
+			S:state 집합을 의미한다. 바둑판에선 바둑돌이 어떻게 놓여져 있는가를, 
+			미로를 탈출하는 문제에서는 현재 위치를 나타낸다
+3. Function Approximation
+- ax3+bx2+cx+d 
+- parameter(a,b,c,d)
+- noise와 memory가 많이들어서 이들의 관계만 정리하는게 빠르다
+- costfunction을 정의하고 많은 옵티마이저를 이용한다.
+- Reinforcement learning agents 가 실제 세계의 복잡도를 가진 문제에서 잘 작동하기 위해서는
+  - 상당한 고차원의 sensory inputs으로부터 representation을 잘 얻어낼 수 있어야 한다.
+  - 얻어낸 representation으로 과거의 경험을 일반화하여 새로운 상황에서도 잘 적용할 수 있어야 한다.
+  -> RL의 유용성은 아주 제한적인 도메인 (e.g.저차원의 state-space를 가진 도메인)에 머물러 있다.
+- Deep Convolutional Neural Network가 non-linear function approximator로써 이례적인 성능을 보이고 있다.
+- CNN구조를 이용하여 raw sensory data를 입력하는 action value function의 근사함수를 만들면 더좋은 성능을 기대할 수 씨다.
+- 강화학습에서 action value function사용하기위해 non-linear function approximator를 사용할 경우
+  수렴성이 보장되지 않는다.
+- Problem of RL:
+- Correlation between samples : 강화학습에서의 학습 데이터는 시간의 흐름에 따라 순차적으로 수집되고,
+ 이 순차적인 데이터는 근접한 것들 끼리 높은 correlation을 띄게된다
+- 만약에 이 순차적인 데이터를 그대로 입력으로 사용할 활용하게 되면 입력 이미지 들 간의 높은 correlation에 의해 
+학습이 불안정 해질 것 이다.
+-Non-stationary targets: MSE를 이용하여 Optimal action value function을 근사하기 위한 loss function 을 다음과 같이 표현 할 수 있다.
+ Li(θi)= Εs,a,r,s'[(r + γmaxa'Q(s',a';θi)- Q(s,a;θi)2)],
+ where θi are the parameters of the Q-network at interation i.
+ 
+3. DQN
+- raw pixel 을 받아와 directly input data로 다룬 것
+- CNN을 function approximator로 이용한 것
+- 하나의 agent가 여러 종류의 Atari game을 학습할 수 있는 능력을 갖춘 것
+- Experience replay를 사용하여 data efficiency를 향상한 것
+- Replay Memory : agent 의 경험을 et= (st,at,rt,st+1)를 time step 단위로 data set Dt= {e1,...,et}에 저장해둔다
+    저장된 data set으로부터 uniform random sampling 을 통해 minibatch를 구성하여 학습을 진행한다. ((s,a,r,s')~U(D))
+    - Minibatch가 순차적인 데이터로 구성되지 않으므로 입력 데이터 사이의 correlation을 상당히 줄일 수 있다.
+    - 과거의 경험에 대해 반복적인 학습을 가능하게 한다.
+- Fixed Q-Target : Q(s,a;θ)와 같은 네트워크 구조이지만 다른 파라미터를 가진 (독립적인) target network Q(s,a;θ-)
+    를 만들고 이를 Q-learning target yi에 이용한다.
+    - Target network parameters θi- 는 매 C step마다 Q-network parameters(θi)로 업데이트 된다. 즉 C번의
+    interation동안에는 Q-learning update시 target이 움직이는 현상을 방지 할 수 있다.
+- Gradient Clipping : Loss function ; (r + γmaxa'Q(s',a';θi-)- Q(s,a;θi))2
+  - 위 loss function에 대한 gradient의 절대값이 1보다 클때는 절대값이 1이 되도록 clipping해준다
+  - Huber loss[10]와 기능적으로 동일하기 때문에 구현시에는 loss function을 Huber loss로 정의 하기도 한다.
+    Φhub(u) = {u2           |u| <= M  
+               M(2|u| - M)  |u| > M
+4. policy gradient
+- Unstable Policy : Greedy Updates
+  Potentially unstable learning process with large policy jumps
+  policy Gradient updates
+  stable learning process with smooth policy improvement
+- Stochastic Policy : ex) 가위- 바위- 보  
+- policy Objective function : start value 사용
+          average value 사용
+          average reward per time step 사용
+          stationary distribution
+- Policy Gradient :
+  - Finite Difference Policy Gradient : 세타의 모델링을 하기위한 변수의 차수가 있을때 각각의 차원에 대해서 얼마나 민감
+  편미분을 하였을때 판단하는 지표 
+  - Monte-Carlo Policy Gradient (REINFORCE): 해석적으로 적용을 하는 것이고, Gradient를 구해보는 방식 
+  미분이 가능한 Function이라고 가정함.
+      Policy Gradient Theorem : 즉각 적인 reward인 R이아니라 Q를 넣고 하는 방식
+  - Actor - Critic Policy Gradient : critic 을 도입 Q function을 추정하는 , Actor policy parameters 를 구하는 세타, 
+      value + policy 두개의 파라미터를 두고 구하는 방식
