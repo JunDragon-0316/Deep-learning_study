@@ -1,0 +1,93 @@
+1. Time Series Deep Learning 개요
+- 시계열은 일정 시간 간격으로 배치된 데이터들의 수열을 말한다.
+- 주식 analysis, Sensor Data Analysis, Audio Analysis, Energy Consumption Analysis(HVAC) 등 의 Application이 있다.
+- Traditional Method : autocorrelation, Seasonality, Stationarity
+- Audio Recognition : Feature을 뽑아내는 작업을 통해서 잘뽑아내고 시계열 데이터를 기반으로 겹침성,
+  을 가진 단어들을 실질 사용 가능한 단어로 Preprocessing(정리) 하여 딥러닝.
+- Preprocessing : Time Domain -> Frequency Domain
+
+2. DFT(Discrete Fourier Transform)
+- DFT(Discrete Fourier Transform) : 유한한 신호 시퀀스의 이산 신호의 푸리에 변환을 구하기 위한 방법
+  컴퓨터로 푸리에 변환을 할 때 생기는 신호의 길이가 유한하지 않다는 문제점 해결하는 방법.
+  컴퓨터는 Discrete한 정보만을 계산할 수 있다는 문제점을 해결한 방법이다.
+  1단계 : L개의 Sample로 DTFT수행
+  2단계 : sample 신호의 주파수를 N개로 나눔
+  3단계 : DFTF 수식에 대입
+
+3. FFT(Fast Fourier Transform)
+- FFT(Fast Fourier Transform): DFT의 연산시간이 느려서 고안된 방법
+  sampling된 신호의 전부를 변환시키는 것이 아니라 필요한 신호만을 골라내어서 최소화 하여 고속으로 
+  퓨리에 변환을 연산
+  쿨리-튜키 알고리즘, Rader's FFT algorithm, Bluestein's FFT algorithm
+- 쿨리-튜키 알고리즘: N = 2k인 DFT를 O(k,N에 의한)재귀적 적용 샘플링된 일부만 사용함
+
+4.STFT
+- 어떤 주파수를 얼만큼 가지고 있는지 명백히 보여주지만, 시간의 흐름에 따라서 어느 시간대에 주파수가
+얼만큼 변했는지 알기 어려운 단점이 있다. -> 이러한 단점을 위해 고안된 STFT
+- 시간과 주파수의 2개의 축, STFT를 하게되면 신호에 대해 자신이 알고 싶은 시점에서 주파수의 성분을
+알 수 있다. 
+
+5. MFCC(Mel Frequency Cepstral Coefficient)
+- 사람의 귀가 주파수 변화에 반응하게 되는 양상이 선형적이지 않고, 로그스케일과 멜스케일을 따르는 청각적 특성을
+반영한 켑스트럼 계수 추출 방법
+- 멜스케일 : 낮은 주파수에서는 작은 변화에도 민감하게 반응하지만, 높은 주파수로 갈수록 민감도가
+작아지므로 특징 추출시 주파수 분석 빈도를 이와 같은 특성에 맞추는 방식이다.
+  음성 신호의 특징벡터인 선형예측계수를 화자의 변동에 따른 변화와 무관하게 강인한 인식률을 유지하는데
+  도움을 주기 위한 방법이디 때문에 선형예측계수보다 잡음에 훨씬 강하다.
+- 적용방법 : 소리의 도메인의 신호를 작은 크기의 프레임으로 자른다. 
+  -> 각 프레임에 대하여 Periodogram estimate를 계산한다.
+  -> Power Spectrum에 Mel Filter bank를 적용하고 각 필터에 에너지를 합한다.
+  -> 구한 모든 필터 뱅크 에너지의 Log를 취한다 ->  이 값에 DCT를 취한다
+  -> DCT를 취한 값에 Coefficients 2~13 만 남기고 나머지는 버린다.
+  
+6. Melspectrogram
+- Separate to windows 윈도우를 분리 
+- Compute FFT : 계산해서 equency domain으로 바꿈
+- Generate a MEl scale : n_mels 로 나누고 대입한다
+- Generate Spectrogram : mel scale로 실질적으로 표현하는 작업을 수행
+
+7. Code & Library
+- https://datascienceschool.net/view-notebook/691326b7f88644f79ec7ddc9f27f84ec/
+- LibROSA , fftppack...등등 정리
+
+8. RNN, Seq2Seq, LSTM, GRU
+- RNN (Recurrent Neural Network) : 반복되는 -> 시퀀스의 모든 요소에 대해 동일한 작업을 수행하고 출력은
+  이전 계산에 의존하기 떄문에 반복적이라고 한다.
+    - 지금까지 계산 된 것에 대해 정보를 캡처하는 메모리가 있다.
+    - 장점 : 시퀀스의 길이에 관계없는 Input/ Output
+    - 단점 : Gradient Vanishing : 상대적으로 짧은 Sequence 학습, 장기간에 걸친 시간의존성은 학습시킬 수 없다.
+    - 입력, 은닉, 출력층으로 구성되어 있다.
+- Seq2seq : Encoding ; 매우 복잡한 무언가를 단순한 것으로 표현할 수 있게끔 해준다.
+  RNN도 Encoder / Decoder의 역할을 할 수 있다.
+- LSTM : 장시간에 걸친 시간 의존성, 단시간에 걸친 시간의존성 모두를 학습시킬 수 있는 기법
+  Cell state, Input gate, Forget gate, Output gate로 구성되어 있다.
+  forget gate : 시간 t에서의 정보의 중요도에 따른 망각 결정 
+  input gate : 시간 t에서의 정보를 받아들이는 양 결정
+  Cell state : 내부 기억에 관련된 state -> Input정보를 얼마나 받아들일지 이전 cell state를 얼마나 망각할지 결정
+  output gate : 다음 연속된 모듈에 hidden state를 결정
+  핍홀변형 : cell state의 제어를 보다 용이하게 만드는 구조
+  merge input/ forget gate 변형 
+  GRU변형 : reset / update gate만을 사용한 간소화
+- GRU(Gated Recurrent Unit) : Reset gate를 계산해서 임시 ht를 만든다.
+    Update gate를 통해 ht-1과 ht간의 비중을 결정한다. -> zt를 이용해 최종 ht를 계산한다.
+
+9. RNN Types, Attention
+- RNN types : one to one, one to many, many to one, many to many 1, 2
+  - one to one : Vanilla mode of processing without RNN 
+  - one to many : Sequence output
+  - many to one : Sequence input
+  - many to many : sequence input and Sequence output
+  - many to many 2 : synced sequence input and output
+- Bi-directional RNN : 양방향 RNN 과거와 미래의 정보가 모두 현재 스텝에 영향을 주는 경우
+  ex ) 영어 문제에서 빈칸에 가장 알맞는 단어 채우기 (앞, 뒤 문장을 모두 확인해야 된다.)
+- Attention : seq2seq의 문제점 = 디코더가 인코더로부터 수신 하는 정보는 마지막 인코더 숨겨진 상태 뿐.
+  Attention은 모든 인코더 숨겨진 상태의 정보를 디코더에 제공하는 인코더와 디코더 간의 인터페이스이다.
+  - step 0 : prepare hidden states.
+  - step 1 : obtain a score for every encoder hidden state.
+  - step 2 : Run all the scores through a softmax layer.
+  - step 4 : Sum up the alignment vectors.
+  - step 5 : Feed the context vector into the decoder.
+  Bahdanau et. al(2015) = BiGRU / GRU 
+  additive/concat
+  Luong. al (2015) = two stacked long short- term memory (LSTM)
+  - additive/concat, dot product, location based, general
